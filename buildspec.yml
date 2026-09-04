@@ -2,22 +2,20 @@ version: 0.2
 
 phases:
   pre_build:
-    command:
+    commands:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_URL
   build:
     command:
       - docker build -t demo_llm . 
 
-      - docker tag \
-        demo_llm:latest \
-        $ECR_URL:latest
+      - docker tag demo_llm:lastest $ECR_URL:lastest 
 
   post_build:
     command:
-      - docker push $ECR_URL:lastest
+      - docker push $ECR_URL:lastest 
       
       - printf '[{"name":"llm-chatbot","imageUri":"%s"}]' $ECR_URI:latest > imagedefinitions.json
 
-artifacs:
+artifacts:
   files:
     - imagedefinations.json
